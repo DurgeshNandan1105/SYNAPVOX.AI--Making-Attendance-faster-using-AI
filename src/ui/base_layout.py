@@ -49,7 +49,7 @@ def style_base_layout():
                 
          /* Hide Top Bar of streamlit */
                 
-            #MainMenu, footer {
+            #MainMenu, footer, header {
                 visibility: hidden;
             }
                 
