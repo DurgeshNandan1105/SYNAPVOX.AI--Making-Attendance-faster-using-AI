@@ -1,4 +1,4 @@
-# Environment variables (VERY IMPORTANT)
+# Environment variables
 .env
 
 # VS Code settings
@@ -11,10 +11,20 @@ __pycache__/
 # OS files
 .DS_Store
 
-
-# Virtual Environment
+# Virtual Environments
 venv/
+venv39/
 
+# Streamlit secrets
 .streamlit/
 
+# Build folders
 dist/
+
+# ML model/cache files
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+*.npy
