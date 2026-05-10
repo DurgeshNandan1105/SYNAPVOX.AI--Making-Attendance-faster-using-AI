@@ -7,13 +7,15 @@ pillow
 scikit-learn
 setuptools<70.0.0
 
-# face recognition
+# face recognition (IMPORTANT ORDER)
+cmake
 dlib
 face_recognition
+
 git+https://github.com/ageitgey/face_recognition_models
 
 # database/auth
-supabase>=2.0.0
+supabase==2.3.4
 bcrypt
 
 # qr
