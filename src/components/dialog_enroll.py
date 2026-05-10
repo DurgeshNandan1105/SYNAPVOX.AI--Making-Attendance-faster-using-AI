@@ -19,9 +19,9 @@ def enroll_dialog():
     )
 
     if st.button(
-        'Enroll now',
-        type='primary',
-        width='stretch'
+    'Enroll now',
+    type='primary',
+    use_container_width=True
     ):
 
         if join_code:

@@ -1,21 +1,24 @@
-streamlit
+streamlit==1.45.1
 
 # utilities
 numpy
 pandas
-
-# FACE RECOGNITION
+pillow
 scikit-learn
-dlib-bin
-
-git+https://github.com/ageitgey/face_recognition_models
 setuptools<70.0.0
 
+# face recognition
+dlib
+face_recognition
+git+https://github.com/ageitgey/face_recognition_models
+
+# database/auth
 supabase
 bcrypt
 
+# qr
 segno
-pillow
 
+# voice
 librosa
 resemblyzer
