@@ -145,13 +145,44 @@ def get_student_attendance(usn):
 
     return response.data
 
-
 def create_attendance(logs):
+    try:
+        if not logs:
+            raise Exception("Empty logs")
 
-    response = supabase.table('attendance_logs').insert(logs).execute()
+        formatted_logs = []
 
-    return response.data
+        for log in logs:
 
+            usn = log.get("usn") or log.get("student_id")
+
+            if not usn:
+                print("Skipping invalid log:", log)
+                continue
+
+            formatted_logs.append({
+                "usn": usn,
+                "subject_id": log.get("subject_id"),
+                "timestamp": log.get("timestamp"),
+                "is_present": log.get("is_present", False)
+            })
+
+        if not formatted_logs:
+            raise Exception("No valid attendance records to insert")
+
+        response = (
+            supabase
+            .table("attendance_logs")
+            .insert(formatted_logs)
+            .execute()
+        )
+
+        return response.data
+
+    except Exception as e:
+        print("Attendance insert error:", e)
+        raise e
+    
 
 def get_attendance_for_teacher(teacher_id):
 
