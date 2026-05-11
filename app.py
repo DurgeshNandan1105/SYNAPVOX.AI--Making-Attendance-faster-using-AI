@@ -8,20 +8,44 @@ from src.components.dialog_auto_enroll import auto_enroll_dialog
 
 
 def main():
+
     st.set_page_config(
         page_title='SYNAPVOX.AI - Making Attendance faster using AI',
         page_icon="https://i.ibb.co/YTYGn5qV/logo.png"
     )
 
-    # ✅ Hide Streamlit branding/footer
+    # ✅ Hide Streamlit branding
     hide_streamlit_style = """
     <style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
+
+    #MainMenu {
+        visibility: hidden;
+    }
+
+    footer {
+        visibility: hidden;
+    }
+
+    header {
+        visibility: hidden;
+    }
+
     [data-testid="stDecoration"] {
         display: none;
     }
+
+    [data-testid="stToolbar"] {
+        display: none;
+    }
+
+    button[kind="header"] {
+        display: none;
+    }
+
+    .stDeployButton {
+        display: none;
+    }
+
     </style>
     """
 
@@ -48,7 +72,10 @@ def main():
             st.session_state.login_type = 'student'
             st.rerun()
 
-        if st.session_state.get('is_logged_in') and st.session_state.get('user_role') == 'student':
+        if (
+            st.session_state.get('is_logged_in')
+            and st.session_state.get('user_role') == 'student'
+        ):
             auto_enroll_dialog(join_code)
 
 
