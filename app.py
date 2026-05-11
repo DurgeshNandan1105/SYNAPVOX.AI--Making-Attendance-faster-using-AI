@@ -6,18 +6,32 @@ from src.screens.student_screen import student_screen
 
 from src.components.dialog_auto_enroll import auto_enroll_dialog
 
+
 def main():
     st.set_page_config(
         page_title='SYNAPVOX.AI - Making Attendance faster using AI',
         page_icon="https://i.ibb.co/YTYGn5qV/logo.png"
     )
 
+    # ✅ Hide Streamlit branding/footer
+    hide_streamlit_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    [data-testid="stDecoration"] {
+        display: none;
+    }
+    </style>
+    """
+
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
     if 'login_type' not in st.session_state:
         st.session_state['login_type'] = None
 
     login_type = st.session_state['login_type']
 
-    # ✅ FIXED: replaced match-case
     if login_type == 'teacher':
         teacher_screen()
 
