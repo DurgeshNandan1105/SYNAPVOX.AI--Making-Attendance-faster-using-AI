@@ -1,3 +1,4 @@
+```gitignore
 # Environment variables
 .env
 
@@ -7,24 +8,42 @@
 # Python cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
 # OS files
 .DS_Store
 
-# Virtual Environments
+# Virtual environments
 venv/
 venv39/
 
-# Streamlit secrets
+# Streamlit
 .streamlit/
 
-# Build folders
+# Build / deployment
 dist/
+build/
+*.egg-info/
 
-# ML model/cache files
+# Logs
+*.log
+
+# ML / AI model files
 *.pkl
 *.joblib
 *.h5
 *.pt
 *.pth
 *.npy
+
+# Large datasets (optional but recommended)
+*.csv
+*.json
+*.wav
+*.mp3
+
+# Torch / cache folders
+torch/
+.cache/
+```
