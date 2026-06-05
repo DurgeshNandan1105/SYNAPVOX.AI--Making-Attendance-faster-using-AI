@@ -15,7 +15,7 @@
 [Visit SYNAPVOX AI](https://snap-vox-ai-landing-page.vercel.app/)
 
 🎥 **Project Demo Video**
-(Add your demo video link here)
+[![Watch Demo](demo-thumbnail.png)](https://github.com/DurgeshNandan1105/SYNAPVOX-AI/blob/main/Demo%20video.mp4)
 
 ---
 
