@@ -1,6 +1,6 @@
-# 🎙️ SYNAPVOX AI - AI-Powered Attendance System
+# 🎙️ SYNAPVOX AI - Making-Attendance-faster-using-AI
 
-> An AI-powered attendance management platform that combines **Face Recognition** and **Voice Recognition** to automate student attendance with high accuracy and minimal manual effort.
+> SYNAPVOX AI - Making-Attendance-faster-using-AI platform that combines **Face Recognition** and **Voice Recognition** to automate student attendance with high accuracy and minimal manual effort.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-WebApp-red)
