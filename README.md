@@ -11,7 +11,9 @@
 
 ## 🌐 Live Demo & Video
 
-🚀 **Live App / Landing Page**: [Visit SYNAPVOX AI](https://snap-vox-ai-landing-page.vercel.app/)
+🚀 **Live Web App**: [Open Streamlit App](https://synapvoxai.streamlit.app/)
+
+🌐 **Landing Page**: [Visit SYNAPVOX AI Landing Page](https://snap-vox-ai-landing-page.vercel.app/)
 
 🎥 **Project Demo Video**: [![Watch Demo](https://img.shields.io/badge/Watch-Demo%20Video-red?style=for-the-badge&logo=youtube)](https://raw.githubusercontent.com/DurgeshNandan1105/SYNAPVOX.AI--Making-Attendance-faster-using-AI/main/Demo%20video.mp4)
 
