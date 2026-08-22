@@ -12,5 +12,5 @@ jobs:
     steps:
       - name: Ping Streamlit App
         run: |
-          curl -sL https://synapvoxai.streamlit.app/ > /dev/null
-          echo "Successfully pinged SynapVox.ai Streamlit App at $(date)"
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-redirs 5 https://synapvoxai.streamlit.app/ || echo "Redirected")
+          echo "Successfully pinged SynapVox.ai Streamlit App at $(date) (HTTP Status: $STATUS_CODE)"
