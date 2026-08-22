@@ -4,7 +4,6 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-App-red.svg)](https://streamlit.io/)
 [![Buildathon](https://img.shields.io/badge/Razorpay-Buildathon%20Open%20Track-0284C7.svg)](https://razorpay.com/)
 [![Database](https://img.shields.io/badge/Database-Supabase-orange.svg)](https://supabase.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 > **SynapVox.ai** revolutionizes classroom and institutional attendance by combining **Computer Vision (Face Biometrics)** and **Deep Voice Speaker Identification**. Say goodbye to 10-minute manual roll calls and proxy attendance—mark an entire class present in under 5 seconds.
 
@@ -135,9 +134,3 @@ Submitted for **Track 05: Open Track ("Build what you believe should exist")**.
 *AI & Full-Stack Developer*
 
 - GitHub: [@DurgeshNandan1105](https://github.com/DurgeshNandan1105)
-
----
-
-## 📜 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
