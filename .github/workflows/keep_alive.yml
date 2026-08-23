@@ -10,7 +10,43 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Streamlit App
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Playwright
+        run: npx playwright install chromium --with-deps
+
+      - name: Wake and Keep Streamlit App Alive
         run: |
-          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-redirs 5 https://synapvoxai.streamlit.app/ || echo "Redirected")
-          echo "Successfully pinged SynapVox.ai Streamlit App at $(date) (HTTP Status: $STATUS_CODE)"
+          node -e '
+          const { chromium } = require("playwright");
+          (async () => {
+            console.log("Launching headless browser...");
+            const browser = await chromium.launch({ headless: true });
+            const context = await browser.newContext();
+            const page = await context.newPage();
+            
+            console.log("Navigating to https://synapvoxai.streamlit.app/...");
+            await page.goto("https://synapvoxai.streamlit.app/", { waitUntil: "networkidle", timeout: 60000 }).catch(e => console.log("Navigation note:", e.message));
+            
+            await page.waitForTimeout(5000);
+            
+            const wakeButton = page.locator("button:has-text(\"Yes, get this app back up!\")");
+            if (await wakeButton.isVisible({ timeout: 5000 }).catch(() => false)) {
+              console.log("App was sleeping! Clicking wake up button...");
+              await wakeButton.click();
+              console.log("Waiting 20 seconds for Streamlit app to wake up...");
+              await page.waitForTimeout(20000);
+            } else {
+              console.log("App is active! WebSocket session connected successfully.");
+              await page.waitForTimeout(5000);
+            }
+            
+            await browser.close();
+            console.log("Keep-alive task complete!");
+          })();
+          '
