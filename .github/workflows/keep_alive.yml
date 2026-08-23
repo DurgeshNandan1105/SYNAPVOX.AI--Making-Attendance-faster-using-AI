@@ -35,12 +35,12 @@ jobs:
             
             await page.waitForTimeout(5000);
             
-            const wakeButton = page.locator("button:has-text(\"Yes, get this app back up!\")");
-            if (await wakeButton.isVisible({ timeout: 5000 }).catch(() => false)) {
+            const wakeButton = page.locator('button:has-text("Yes, get this app back up!"), button:has-text("Wake"), button:has-text("wake")').first();
+            if (await wakeButton.isVisible({ timeout: 10000 }).catch(() => false)) {
               console.log("App was sleeping! Clicking wake up button...");
               await wakeButton.click();
-              console.log("Waiting 20 seconds for Streamlit app to wake up...");
-              await page.waitForTimeout(20000);
+              console.log("Waiting 30 seconds for Streamlit app to boot up...");
+              await page.waitForTimeout(30000);
             } else {
               console.log("App is active! WebSocket session connected successfully.");
               await page.waitForTimeout(5000);
