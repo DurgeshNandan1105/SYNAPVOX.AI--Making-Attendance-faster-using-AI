@@ -47,7 +47,7 @@ def enroll_dialog():
                     .table('subject_students')
                     .select('*')
                     .eq('subject_id', subject['subject_id'])
-                    .eq('usn', student_id)
+                    .ilike('usn', student_id)
                     .execute()
                 )
 

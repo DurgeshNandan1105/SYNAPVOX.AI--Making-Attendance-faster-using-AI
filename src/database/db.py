@@ -148,7 +148,7 @@ def unenroll_student_to_subject(usn, subject_id):
         lambda db: (
             db.table('subject_students')
             .delete()
-            .eq('usn', clean_usn)
+            .ilike('usn', clean_usn)
             .eq('subject_id', subject_id)
             .execute()
         )
@@ -162,7 +162,7 @@ def get_student_subjects(usn):
         lambda db: (
             db.table('subject_students')
             .select('*, subjects(*)')
-            .eq('usn', clean_usn)
+            .ilike('usn', clean_usn)
             .execute()
         )
     )
@@ -175,7 +175,7 @@ def get_student_attendance(usn):
         lambda db: (
             db.table('attendance_logs')
             .select('*, subjects(*)')
-            .eq('usn', clean_usn)
+            .ilike('usn', clean_usn)
             .execute()
         )
     )
