@@ -64,9 +64,9 @@ def voice_attendance_dialog(selected_subject_id):
                 )
                 return
 
-            # Build candidate dictionary
+            # Build candidate dictionary (lowercased USN keys)
             candidates_dict = {
-                s['students']['usn']:
+                s['students']['usn'].strip().lower():
                 s['students']['voice_embedding']
 
                 for s in enrolled_students
@@ -115,7 +115,7 @@ def voice_attendance_dialog(selected_subject_id):
                 student = node['students']
 
                 score = detected_scores.get(
-                    student['usn'],
+                    student['usn'].strip().lower(),
                     0.0
                 )
 

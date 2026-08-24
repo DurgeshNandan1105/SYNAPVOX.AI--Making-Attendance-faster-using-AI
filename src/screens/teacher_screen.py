@@ -287,9 +287,9 @@ def teacher_tab_take_attendance():
 
                         student = node['students']
 
-                        # FIXED: USING USN
+                        # FIXED: USING USN (case-insensitive lookup)
                         sources = all_detected_ids.get(
-                            student['usn'],
+                            student['usn'].strip().lower(),
                             []
                         )
 
