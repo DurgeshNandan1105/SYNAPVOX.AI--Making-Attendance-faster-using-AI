@@ -134,16 +134,24 @@ def get_teacher_subjects(teacher_id):
 
 
 def enroll_student_to_subject(usn, subject_id):
-    clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
-    data = {'usn': clean_usn, "subject_id": subject_id}
+    if not usn or not subject_id:
+        return None
+    raw_usn = usn.strip() if isinstance(usn, str) else usn
+    data = {'usn': raw_usn, "subject_id": subject_id}
     res = safe_query(
         lambda db: db.table('subject_students').insert(data).execute()
     )
-    return res.data if res else None
+    if res and res.data:
+        return res.data
+    data_lower = {'usn': raw_usn.lower() if isinstance(raw_usn, str) else raw_usn, "subject_id": subject_id}
+    res_lower = safe_query(
+        lambda db: db.table('subject_students').insert(data_lower).execute()
+    )
+    return res_lower.data if res_lower else None
 
 
 def unenroll_student_to_subject(usn, subject_id):
-    clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
+    clean_usn = usn.strip() if isinstance(usn, str) else usn
     res = safe_query(
         lambda db: (
             db.table('subject_students')
@@ -157,8 +165,10 @@ def unenroll_student_to_subject(usn, subject_id):
 
 
 def get_student_subjects(usn):
-    clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
-    res_usn = safe_query(
+    if not usn:
+        return []
+    clean_usn = usn.strip() if isinstance(usn, str) else usn
+    res = safe_query(
         lambda db: (
             db.table('subject_students')
             .select('*, subjects(*)')
@@ -166,30 +176,14 @@ def get_student_subjects(usn):
             .execute()
         )
     )
-    res_sid = safe_query(
-        lambda db: (
-            db.table('subject_students')
-            .select('*, subjects(*)')
-            .ilike('student_id', clean_usn)
-            .execute()
-        )
-    )
-    subs_usn = res_usn.data if res_usn and res_usn.data else []
-    subs_sid = res_sid.data if res_sid and res_sid.data else []
-
-    combined_subs = {}
-    for sub in (subs_usn + subs_sid):
-        if sub and sub.get('subjects'):
-            sub_id = sub.get('subject_id') or sub.get('id')
-            if sub_id not in combined_subs:
-                combined_subs[sub_id] = sub
-
-    return list(combined_subs.values())
+    return res.data if res and res.data else []
 
 
 def get_student_attendance(usn):
-    clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
-    res_usn = safe_query(
+    if not usn:
+        return []
+    clean_usn = usn.strip() if isinstance(usn, str) else usn
+    res = safe_query(
         lambda db: (
             db.table('attendance_logs')
             .select('*, subjects(*)')
@@ -197,25 +191,7 @@ def get_student_attendance(usn):
             .execute()
         )
     )
-    res_sid = safe_query(
-        lambda db: (
-            db.table('attendance_logs')
-            .select('*, subjects(*)')
-            .ilike('student_id', clean_usn)
-            .execute()
-        )
-    )
-    logs_usn = res_usn.data if res_usn and res_usn.data else []
-    logs_sid = res_sid.data if res_sid and res_sid.data else []
-
-    combined_logs = {}
-    for idx, log in enumerate(logs_usn + logs_sid):
-        if log:
-            log_id = log.get('id', idx)
-            if log_id not in combined_logs:
-                combined_logs[log_id] = log
-
-    return list(combined_logs.values())
+    return res.data if res and res.data else []
 
 
 def create_attendance(logs):
@@ -227,10 +203,8 @@ def create_attendance(logs):
         usn = log.get("usn") or log.get("student_id")
         if not usn:
             continue
-        clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
         formatted_logs.append({
-            "usn": clean_usn,
-            "student_id": clean_usn,
+            "usn": usn.strip() if isinstance(usn, str) else usn,
             "subject_id": log.get("subject_id"),
             "timestamp": log.get("timestamp"),
             "is_present": log.get("is_present", False)

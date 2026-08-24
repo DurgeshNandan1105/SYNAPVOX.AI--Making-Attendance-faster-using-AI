@@ -39,7 +39,7 @@ def enroll_dialog():
                 subject = res.data[0]
 
                 student_id = (
-                    st.session_state.student_data['usn'].strip().lower()
+                    st.session_state.student_data['usn']
                 )
 
                 check = (
@@ -47,7 +47,7 @@ def enroll_dialog():
                     .table('subject_students')
                     .select('*')
                     .eq('subject_id', subject['subject_id'])
-                    .ilike('usn', student_id)
+                    .ilike('usn', student_id.strip())
                     .execute()
                 )
 
@@ -59,16 +59,17 @@ def enroll_dialog():
 
                 else:
 
-                    enroll_student_to_subject(
+                    res_enroll = enroll_student_to_subject(
                         student_id,
                         subject['subject_id']
                     )
 
-                    st.success('Successfully enrolled!')
-
-                    time.sleep(1)
-
-                    st.rerun()
+                    if res_enroll:
+                        st.success('Successfully enrolled!')
+                        time.sleep(1)
+                        st.rerun()
+                    else:
+                        st.error('Enrollment failed. Could not save to database.')
 
             else:
 
