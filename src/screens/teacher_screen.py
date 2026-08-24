@@ -22,8 +22,10 @@ from src.pipelines.face_pipeline import predict_attendance
 from src.components.dialog_attendance_results import attendance_result_dialog
 
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import pandas as pd
+
+IST = timezone(timedelta(hours=5, minutes=30))
 
 from src.database.config import supabase
 from src.components.dialog_voice_attendance import voice_attendance_dialog
@@ -279,7 +281,7 @@ def teacher_tab_take_attendance():
                     results = []
                     attendance_to_log = []
 
-                    current_timestamp = datetime.now().strftime(
+                    current_timestamp = datetime.now(IST).strftime(
                         "%Y-%m-%dT%H:%M:%S"
                     )
 
@@ -417,8 +419,10 @@ def teacher_tab_attendance_records():
             ),
 
             "Time": (
-                datetime.fromisoformat(ts).strftime(
-                    "%Y-%m-%d %I:%M %p"
+                (
+                    datetime.fromisoformat(ts).replace(tzinfo=timezone.utc).astimezone(IST).strftime("%Y-%m-%d %I:%M %p")
+                    if datetime.fromisoformat(ts).tzinfo is None
+                    else datetime.fromisoformat(ts).astimezone(IST).strftime("%Y-%m-%d %I:%M %p")
                 )
                 if ts
                 else "N/A"

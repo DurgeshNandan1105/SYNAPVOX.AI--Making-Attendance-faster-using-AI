@@ -1,8 +1,9 @@
 import streamlit as st
 import pandas as pd
 
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
+IST = timezone(timedelta(hours=5, minutes=30))
 from src.pipelines.voice_pipeline import process_bulk_audio
 from src.database.config import supabase
 from src.components.dialog_attendance_results import (
@@ -101,7 +102,7 @@ def voice_attendance_dialog(selected_subject_id):
             attendance_to_log = []
 
             current_timestamp = (
-                datetime.now().strftime(
+                datetime.now(IST).strftime(
                     "%Y-%m-%dT%H:%M:%S"
                 )
             )
