@@ -158,7 +158,7 @@ def unenroll_student_to_subject(usn, subject_id):
 
 def get_student_subjects(usn):
     clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
-    res = safe_query(
+    res_usn = safe_query(
         lambda db: (
             db.table('subject_students')
             .select('*, subjects(*)')
@@ -166,12 +166,30 @@ def get_student_subjects(usn):
             .execute()
         )
     )
-    return res.data if res and res.data else []
+    res_sid = safe_query(
+        lambda db: (
+            db.table('subject_students')
+            .select('*, subjects(*)')
+            .ilike('student_id', clean_usn)
+            .execute()
+        )
+    )
+    subs_usn = res_usn.data if res_usn and res_usn.data else []
+    subs_sid = res_sid.data if res_sid and res_sid.data else []
+
+    combined_subs = {}
+    for sub in (subs_usn + subs_sid):
+        if sub and sub.get('subjects'):
+            sub_id = sub.get('subject_id') or sub.get('id')
+            if sub_id not in combined_subs:
+                combined_subs[sub_id] = sub
+
+    return list(combined_subs.values())
 
 
 def get_student_attendance(usn):
     clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
-    res = safe_query(
+    res_usn = safe_query(
         lambda db: (
             db.table('attendance_logs')
             .select('*, subjects(*)')
@@ -179,7 +197,25 @@ def get_student_attendance(usn):
             .execute()
         )
     )
-    return res.data if res and res.data else []
+    res_sid = safe_query(
+        lambda db: (
+            db.table('attendance_logs')
+            .select('*, subjects(*)')
+            .ilike('student_id', clean_usn)
+            .execute()
+        )
+    )
+    logs_usn = res_usn.data if res_usn and res_usn.data else []
+    logs_sid = res_sid.data if res_sid and res_sid.data else []
+
+    combined_logs = {}
+    for idx, log in enumerate(logs_usn + logs_sid):
+        if log:
+            log_id = log.get('id', idx)
+            if log_id not in combined_logs:
+                combined_logs[log_id] = log
+
+    return list(combined_logs.values())
 
 
 def create_attendance(logs):
@@ -194,6 +230,7 @@ def create_attendance(logs):
         clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
         formatted_logs.append({
             "usn": clean_usn,
+            "student_id": clean_usn,
             "subject_id": log.get("subject_id"),
             "timestamp": log.get("timestamp"),
             "is_present": log.get("is_present", False)

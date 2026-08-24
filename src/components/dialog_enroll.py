@@ -30,7 +30,7 @@ def enroll_dialog():
                 supabase
                 .table('subjects')
                 .select('subject_id, name, subject_code')
-                .eq('subject_code', join_code)
+                .ilike('subject_code', join_code.strip())
                 .execute()
             )
 
