@@ -65,9 +65,22 @@ def get_all_students():
     return res.data if res and res.data else []
 
 
+def get_student_by_usn(usn):
+    if not usn:
+        return None
+    clean_usn = usn.strip().lower()
+    res = safe_query(
+        lambda db: db.table('students').select("*").ilike('usn', clean_usn).execute()
+    )
+    if res and res.data:
+        return res.data[0]
+    return None
+
+
 def create_student(usn, new_name, face_embedding=None, voice_embedding=None):
+    clean_usn = usn.strip().lower() if usn else usn
     data = {
-        'usn': usn,
+        'usn': clean_usn,
         'name': new_name,
         'face_embedding': face_embedding,
         "voice_embedding": voice_embedding
@@ -121,7 +134,8 @@ def get_teacher_subjects(teacher_id):
 
 
 def enroll_student_to_subject(usn, subject_id):
-    data = {'usn': usn, "subject_id": subject_id}
+    clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
+    data = {'usn': clean_usn, "subject_id": subject_id}
     res = safe_query(
         lambda db: db.table('subject_students').insert(data).execute()
     )
@@ -129,11 +143,12 @@ def enroll_student_to_subject(usn, subject_id):
 
 
 def unenroll_student_to_subject(usn, subject_id):
+    clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
     res = safe_query(
         lambda db: (
             db.table('subject_students')
             .delete()
-            .eq('usn', usn)
+            .eq('usn', clean_usn)
             .eq('subject_id', subject_id)
             .execute()
         )
@@ -142,11 +157,12 @@ def unenroll_student_to_subject(usn, subject_id):
 
 
 def get_student_subjects(usn):
+    clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
     res = safe_query(
         lambda db: (
             db.table('subject_students')
             .select('*, subjects(*)')
-            .eq('usn', usn)
+            .eq('usn', clean_usn)
             .execute()
         )
     )
@@ -154,11 +170,12 @@ def get_student_subjects(usn):
 
 
 def get_student_attendance(usn):
+    clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
     res = safe_query(
         lambda db: (
             db.table('attendance_logs')
             .select('*, subjects(*)')
-            .eq('usn', usn)
+            .eq('usn', clean_usn)
             .execute()
         )
     )
@@ -174,8 +191,9 @@ def create_attendance(logs):
         usn = log.get("usn") or log.get("student_id")
         if not usn:
             continue
+        clean_usn = usn.strip().lower() if isinstance(usn, str) else usn
         formatted_logs.append({
-            "usn": usn,
+            "usn": clean_usn,
             "subject_id": log.get("subject_id"),
             "timestamp": log.get("timestamp"),
             "is_present": log.get("is_present", False)

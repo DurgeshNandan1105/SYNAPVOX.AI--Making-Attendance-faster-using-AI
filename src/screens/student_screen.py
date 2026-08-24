@@ -17,6 +17,7 @@ from src.pipelines.voice_pipeline import get_voice_embedding
 
 from src.database.db import (
     get_all_students,
+    get_student_by_usn,
     create_student,
     get_student_subjects,
     get_student_attendance,
@@ -35,8 +36,8 @@ def student_dashboard():
 
     student_data = st.session_state.student_data
 
-    # USING USN
-    student_id = student_data['usn']
+    # USING USN (lower case)
+    student_id = student_data['usn'].strip().lower()
 
     c1, c2 = st.columns(2, vertical_alignment='center', gap='large')
 
@@ -218,11 +219,11 @@ def student_screen():
 
                     all_students = get_all_students()
 
-                    # MATCH USING USN
+                    # MATCH USING USN (case-insensitive & lowercased)
                     student = next(
                         (
                             s for s in all_students
-                            if s['usn'] == student_id
+                            if s['usn'].strip().lower() == str(student_id).strip().lower()
                         ),
                         None
                     )
@@ -259,13 +260,13 @@ def student_screen():
 
             st.header('Register New Profile')
 
-            # FIXED USN INPUT
+            # USN INPUT (converts to lowercase on submit)
             new_usn = st.text_input(
                 "Enter your USN",
                 placeholder='E.g. 1RV23CS001'
             )
 
-            # FIXED NAME INPUT
+            # NAME INPUT
             new_name = st.text_input(
                 "Enter your name",
                 placeholder='E.g. John Doe'
@@ -288,8 +289,24 @@ def student_screen():
                 key='create_student_account_btn'
             ):
 
-                # FIXED CONDITION
                 if new_name and new_usn:
+
+                    clean_new_usn = new_usn.strip().lower()
+
+                    # Check if student already exists (case-insensitive)
+                    existing_student = get_student_by_usn(clean_new_usn)
+                    if existing_student:
+                        st.session_state.clear()
+                        st.session_state.is_logged_in = True
+                        st.session_state.user_role = 'student'
+                        st.session_state.student_data = existing_student
+
+                        st.toast(
+                            f"Welcome Back {existing_student['name']} 👋"
+                        )
+
+                        time.sleep(1)
+                        st.rerun()
 
                     with st.spinner('Creating profile...'):
 
@@ -309,9 +326,8 @@ def student_screen():
                                     audio_data.read()
                                 )
 
-                            # FIXED FUNCTION CALL
                             response_data = create_student(
-                                usn=new_usn,
+                                usn=clean_new_usn,
                                 new_name=new_name,
                                 face_embedding=face_emb,
                                 voice_embedding=voice_emb

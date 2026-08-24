@@ -72,7 +72,7 @@ def predict_attendance(class_image_np):
 
     # Keep all available USNs
     all_students = [
-        student['usn']
+        student['usn'].lower() if student.get('usn') else ''
         for student in student_db
     ]
 
@@ -114,7 +114,7 @@ def predict_attendance(class_image_np):
             if distance < best_score:
 
                 best_score = distance
-                best_match = student['usn']
+                best_match = student['usn'].lower() if student.get('usn') else None
 
         # FINAL VERIFICATION
         if (

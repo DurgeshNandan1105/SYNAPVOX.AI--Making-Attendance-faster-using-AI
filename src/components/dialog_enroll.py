@@ -39,7 +39,7 @@ def enroll_dialog():
                 subject = res.data[0]
 
                 student_id = (
-                    st.session_state.student_data['usn']
+                    st.session_state.student_data['usn'].strip().lower()
                 )
 
                 check = (
