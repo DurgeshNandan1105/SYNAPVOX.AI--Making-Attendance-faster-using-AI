@@ -5,7 +5,7 @@
 [![Buildathon](https://img.shields.io/badge/Razorpay-Buildathon%20Open%20Track-0284C7.svg)](https://razorpay.com/)
 [![Database](https://img.shields.io/badge/Database-Supabase-orange.svg)](https://supabase.com/)
 
-> **SynapVox.ai** revolutionizes classroom and institutional attendance by combining **Computer Vision (Face Biometrics)** and **Deep Voice Speaker Identification**. Say goodbye to 10-minute manual roll calls and proxy attendance—mark an entire class present in under 5 seconds.
+ **SynapVox.ai** revolutionizes classroom and institutional attendance by combining **Computer Vision (Face Biometrics)** and **Deep Voice Speaker Identification**. Say goodbye to 10-minute manual roll calls and proxy attendance—mark an entire class present in under 5 seconds.
 
 ---
 
